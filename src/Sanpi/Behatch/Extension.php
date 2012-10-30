@@ -137,6 +137,9 @@ class Extension implements ExtensionInterface
                                 scalarNode('screenshot_dir')->
                                     defaultValue('.')->
                                 end()->
+                                scalarNode('screen_capture_tool')->
+                                    defaultValue('import')->
+                                end()->
                                 scalarNode('screen_id')->
                                     defaultValue(':0')->
                                 end()->

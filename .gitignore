@@ -2,3 +2,4 @@ behatch_contexts.phar
 composer.lock
 composer.phar
 vendor
+.idea

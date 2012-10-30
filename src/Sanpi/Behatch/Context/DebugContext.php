@@ -47,11 +47,23 @@ class DebugContext extends BaseContext
         if (empty($filename)) {
             throw new \Exception('You must provide a filename for the screenshot.');
         }
-
         $screenshotDir = $this->getParameter('debug', 'screenshot_dir');
-        $screenId = $this->getParameter('debug', 'screen_id');
+        $screenCaptureTool = strtolower($this->getParameter('debug', 'screen_capture_tool'));
 
-        exec(sprintf('DISPLAY=%s import -window root %s/%s', $screenId, rtrim($screenshotDir, '/'), $filename), $output, $return);
+        if($screenCaptureTool == 'screencapture')
+        {
+            exec(sprintf('screencapture %s/%s', rtrim($screenshotDir, '/'), $filename), $output, $return);
+        }
+        else if($screenCaptureTool == 'import')
+        {
+            $screenId = $this->getParameter('debug', 'screen_id');
+            exec(sprintf('DISPLAY=%s import -window root %s/%s', $screenId, rtrim($screenshotDir, '/'), $filename), $output, $return);
+        }
+        else
+        {
+            throw new \Exception(sprintf('Unsupported screen capture tool :\n%s', $screenCaptureTool));
+        }
+
         if ($return !== 0) {
             throw new \Exception(sprintf('Screenshot was not saved :\n%s', implode("\n", $output)));
         }
