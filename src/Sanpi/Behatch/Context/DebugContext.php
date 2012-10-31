@@ -37,7 +37,8 @@ class DebugContext extends BaseContext
     public function failScreenshots(StepEvent $event)
     {
         if ($event->getResult() == StepEvent::FAILED) {
-            $scenarioName = preg_replace('/\W/', '_', $event->getStep()->getParent()->getTitle());
+            $feature_file = pathinfo($event->getStep()->getParent()->getFeature()->getFile(), PATHINFO_BASENAME);
+            $scenarioName = $feature_file. "-" .preg_replace('/\W/', '_', $event->getStep()->getParent()->getTitle());
             $this->saveScreenshot(sprintf('fail_%s_%s.png', time(), $scenarioName));
         }
     }
