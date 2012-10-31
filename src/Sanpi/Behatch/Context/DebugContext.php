@@ -37,7 +37,7 @@ class DebugContext extends BaseContext
     public function failScreenshots(StepEvent $event)
     {
         if ($event->getResult() == StepEvent::FAILED) {
-            $scenarioName = str_replace(' ', '_', $event->getStep()->getParent()->getTitle());
+            $scenarioName = preg_replace('/\W/', '_', $event->getStep()->getParent()->getTitle());
             $this->saveScreenshot(sprintf('fail_%s_%s.png', time(), $scenarioName));
         }
     }
@@ -52,7 +52,7 @@ class DebugContext extends BaseContext
 
         if($screenCaptureTool == 'screencapture')
         {
-            exec(sprintf('screencapture %s/%s', rtrim($screenshotDir, '/'), $filename), $output, $return);
+            exec(sprintf('screencapture -x %s/%s', rtrim($screenshotDir, '/'), $filename), $output, $return);
         }
         else if($screenCaptureTool == 'import')
         {

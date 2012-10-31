@@ -52,18 +52,23 @@ class Extension implements ExtensionInterface
                     );
                 }
             }
-            if (isset($values['screen_id'])) {
-                exec(sprintf("xdpyinfo -display %s >/dev/null 2>&1 && echo OK || echo KO", $values['screen_id']), $output);
-                if (sizeof($output) != 1 || $output[0] != "OK") {
-                    throw new \RuntimeException(
-                        'Screen id is not available.'
+            $using_import_screen_capture = isset($values['screen_capture_tool'])
+                && strtolower($values['screen_capture_tool']) == 'import';
+            if($using_import_screen_capture)
+            {
+                if (isset($values['screen_id'])) {
+                    exec(sprintf("xdpyinfo -display %s >/dev/null 2>&1 && echo OK || echo KO", $values['screen_id']), $output);
+                    if (sizeof($output) != 1 || $output[0] != "OK") {
+                        throw new \RuntimeException(
+                            'Screen id is not available.'
+                        );
+                    }
+                }
+                else {
+                    throw new \Exception(
+                        'You must provide a screen id.'
                     );
                 }
-            }
-            else {
-                throw new \Exception(
-                    'You must provide a screen id.'
-                );
             }
         }
     }
