@@ -52,7 +52,11 @@ class DebugContext extends BaseContext
 
         if($screenCaptureTool == 'screencapture')
         {
-            exec(sprintf('screencapture -x %s/%s', rtrim($screenshotDir, '/'), $filename), $output, $return);
+            /*
+             * OSX lion is echoing notices
+             * see: https://github.com/omgmog/install-all-firefox/issues/11
+             */
+            exec(sprintf('screencapture -x %s/%s  &> /dev/null', rtrim($screenshotDir, '/'), $filename), $output, $return);
         }
         else if($screenCaptureTool == 'import')
         {
